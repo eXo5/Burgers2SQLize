@@ -23,7 +23,7 @@ module.exports = function(app) {
 			{	
 				where: {
 					id: id
-				}
+				}//sequelize knows that it's id key is not the var id lexically defined here.
 			}).then(function(dbPut){
 				res.redirect("/");
 			});
