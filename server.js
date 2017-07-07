@@ -1,7 +1,8 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-
+var methodOverride = require("method-override");
 var app = express();
+	app.use(methodOverride("_method"));
 	app.use(bodyParser.urlencoded({ extended: false}));
 	app.use(bodyParser.text());
 	app.use(bodyParser.json({ type:"application./vnd.api+json"}));
@@ -17,7 +18,7 @@ var db = require("./models");
 require("./routes/api-routes.js")(app);
 //require("./routes/html-routes.js")(app);
 
-db.sequelize.sync().then(function() {
+db.sequelize.sync({force: true}).then(function() {
 	app.listen(PORT, function(){
 		console.log("App listening on " + PORT);
 	});

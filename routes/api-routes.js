@@ -1,10 +1,31 @@
-var express = require("express");
-var Burger = require("../models/burgers.js");
+//grab db definition for use in route handler.
+var db = require("../models");
 
-var router = express.Router();
 module.exports = function(app) {
 
-	app.get("/", function(req, res){ 
-		res.render("index", {burgers: Burger})
-	})
+		app.get("/", function(req, res){
+
+			db.burgers.findAll({}).then(function(db){
+				res.render("index", {burgers: db});
+			})
+		});
+
+		app.post("/create", function(req, res){
+			db.burgers.create({burger_name: req.body.burgerName})
+			.then(res.redirect("/"));
+		});
+
+		app.put("/burger/eat/:burgId", function(req, res){
+			var id = req.params.burgId;
+			db.burgers.update({
+				devoured: true
+			},
+			{	
+				where: {
+					id: id
+				}
+			}).then(function(dbPut){
+				res.redirect("/");
+			});
+		});
 }
